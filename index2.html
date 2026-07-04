@@ -1,1 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maven Crown | Digital Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A2E22;
+    --paper:#F7F5F0;
+    --paper-dim:#EFEBE1;
+    --gold:#E3A83B;
+    --rust:#B24C1E;
+    --text:#16241D;
+    --line:#D8D2C3;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    color:var(--text);
+    background:var(--paper);
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--ink);
+    margin:0;
+    line-height:1.15;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--rust);
+    font-weight:500;
+  }
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--rust);outline-offset:3px;}
+
+  /* NAV */
+  .navbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,245,240,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;max-width:1180px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;color:var(--ink);}
+  .brand svg{flex-shrink:0;}
+  .nav-links{display:flex;gap:30px;list-style:none;margin:0;padding:0;}
+  .nav-links a{
+    font-size:.9rem;font-weight:500;color:var(--text);
+    padding-bottom:4px;border-bottom:2px solid transparent;
+    transition:border-color .2s;
+  }
+  .nav-links a.active,.nav-links a:hover{border-color:var(--rust);}
+  .nav-cta{
+    background:var(--ink);color:var(--paper)!important;
+    padding:10px 20px;border-radius:var(--radius);
+    font-size:.88rem;font-weight:600;white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--rust);}
+  .nav-toggle{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink);}
+
+  /* HERO */
+  .hero{
+    position:relative;
+    background:var(--ink);
+    color:var(--paper);
+    padding:110px 0 90px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(247,245,240,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247,245,240,.06) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:linear-gradient(180deg, transparent, rgba(0,0,0,.9) 40%, transparent 95%);
+  }
+  .hero-grid{
+    position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;
+  }
+  .hero .eyebrow{color:var(--gold);}
+  .hero h1{
+    font-size:2.9rem;color:#fff;margin:14px 0 20px;letter-spacing:-.01em;
+  }
+  .hero p.lead{font-size:1.08rem;color:#D7DCD3;max-width:520px;margin-bottom:32px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:13px 26px;border-radius:var(--radius);
+    font-weight:600;font-size:.92rem;cursor:pointer;border:1px solid transparent;
+    transition:transform .15s, background .2s, color .2s;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--gold);color:var(--ink);}
+  .btn-primary:hover{background:#f0bb5a;}
+  .btn-ghost{border-color:rgba(247,245,240,.4);color:#fff;}
+  .btn-ghost:hover{border-color:#fff;}
+  .btn-dark{background:var(--ink);color:var(--paper);}
+  .btn-dark:hover{background:var(--rust);}
+
+  .crest{
+    position:relative;justify-self:center;
+    width:100%;max-width:360px;aspect-ratio:1/1;
+    border:1px solid rgba(247,245,240,.25);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .crest::before{
+    content:"";position:absolute;inset:22px;
+    border:1px solid rgba(227,168,59,.4);border-radius:50%;
+  }
+  .crest svg{width:44%;height:44%;}
+  .crest small{
+    position:absolute;bottom:14px;left:0;right:0;text-align:center;
+    font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.12em;
+    text-transform:uppercase;color:#B9C4BB;
+  }
+
+  /* AUDIENCE TABS - signature element */
+  .audience{padding:80px 0 40px;}
+  .section-head{max-width:640px;margin-bottom:40px;}
+  .section-head h2{font-size:2rem;margin-top:10px;}
+  .tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;border-bottom:1px solid var(--line);padding-bottom:0;}
+  .tab-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.04em;
+    padding:10px 4px;margin-right:26px;background:none;border:none;cursor:pointer;
+    color:#7A7669;border-bottom:2px solid transparent;transform:translateY(1px);
+  }
+  .tab-btn.is-active{color:var(--ink);border-color:var(--rust);font-weight:600;}
+  .tab-panel{display:none;}
+  .tab-panel.is-active{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+  .tab-panel p{font-size:1.02rem;color:#3c463f;max-width:480px;}
+  .tab-services{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+  .tab-services li{
+    display:flex;gap:12px;font-size:.95rem;padding:14px 16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .tab-services li span{color:var(--rust);font-family:'IBM Plex Mono',monospace;font-weight:600;}
+
+  /* SERVICES */
+  .services{padding:70px 0;background:var(--paper-dim);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px;}
+  .service-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:32px 26px;transition:border-color .2s, transform .2s;
+  }
+  .service-card:hover{transform:translateY(-4px);border-color:var(--rust);}
+  .service-card .icon{
+    width:42px;height:42px;border-radius:50%;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  }
+  .service-card .icon svg{width:20px;height:20px;stroke:var(--gold);}
+  .service-card h4{font-size:1.1rem;margin-bottom:8px;}
+  .service-card p{margin:0;font-size:.93rem;color:#4a5049;}
+
+  /* PORTFOLIO TEASER */
+  .portfolio{padding:80px 0;}
+  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:36px;}
+  .portfolio-item{
+    position:relative;aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;
+    background:var(--ink);
+  }
+  .portfolio-item img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .2s, transform .3s;}
+  .portfolio-item:hover img{opacity:1;transform:scale(1.04);}
+  .portfolio-tag{
+    position:absolute;left:14px;bottom:14px;
+    font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;
+    color:#fff;background:rgba(10,46,34,.75);padding:6px 10px;border-radius:var(--radius);
+  }
+
+  /* CTA */
+  .cta{
+    background:var(--ink);color:#fff;padding:70px 0;text-align:center;
+  }
+  .cta h2{color:#fff;font-size:1.9rem;margin-bottom:12px;}
+  .cta p{color:#C9D0C9;max-width:520px;margin:0 auto 30px;}
+
+  /* FOOTER */
+  footer{background:#0D1F17;color:#C9D0C9;padding:56px 0 28px;font-size:.92rem;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px;margin-bottom:40px;}
+  footer h3{color:#fff;font-size:1.1rem;margin-bottom:14px;}
+  footer .brand{color:#fff;margin-bottom:14px;}
+  footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  footer a:hover{color:var(--gold);}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,.1);padding-top:22px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-size:.8rem;color:#8B958C;
+  }
+
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .nav-toggle{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .crest{max-width:220px;margin-top:20px;}
+    .hero h1{font-size:2.1rem;}
+    .tab-panel.is-active{grid-template-columns:1fr;}
+    .service-grid,.portfolio-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A2E22" stroke-width="1.6"><path d="M3 8l4 3 5-7 5 7 4-3-2 11H5L3 8z"/></svg>
+      Maven Crown
+    </a>
+    <ul class="nav-links">
+      <li><a class="active" href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="books.html">Books</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="quote.html">Get a Quote</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">Digital Agency &mdash; Ogun State, Nigeria</div>
+      <h1>We design, build and print for organizations that serve people.</h1>
+      <p class="lead">Websites, software, branding and print for businesses, churches, schools and NGOs &mdash; work that looks sharp and holds up.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="portfolio.html">View Portfolio</a>
+        <a class="btn btn-ghost" href="contact.html">Contact Us</a>
+      </div>
+    </div>
+    <div class="crest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#E3A83B" stroke-width="1.3"><path d="M3 8l4 3 5-7 5 7 4-3-2 11H5L3 8z"/></svg>
+      <small>Est. Maven Crown</small>
+    </div>
+  </div>
+</section>
+
+<section class="audience container">
+  <div class="section-head">
+    <div class="eyebrow">Who we build for</div>
+    <h2>Different organizations, different needs.</h2>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn is-active" data-tab="business">Businesses</button>
+    <button class="tab-btn" data-tab="church">Churches</button>
+    <button class="tab-btn" data-tab="school">Schools</button>
+    <button class="tab-btn" data-tab="ngo">NGOs</button>
+  </div>
+
+  <div class="tab-panel is-active" id="business">
+    <p>Storefronts and service businesses that need a site which brings in customers and a brand that looks credible from the first glance.</p>
+    <ul class="tab-services">
+      <li><span>01</span> eCommerce &amp; business websites</li>
+      <li><span>02</span> Logo &amp; brand identity design</li>
+      <li><span>03</span> Business cards, banners &amp; signage printing</li>
+    </ul>
+  </div>
+  <div class="tab-panel" id="church">
+    <p>Parishes and ministries that need event materials turned around fast, and a church website members can actually find service times on.</p>
+    <ul class="tab-services">
+      <li><span>01</span> Church websites &amp; event pages</li>
+      <li><span>02</span> Flyers, programme booklets &amp; banners</li>
+      <li><span>03</span> Anniversary &amp; crusade branding</li>
+    </ul>
+  </div>
+  <div class="tab-panel" id="school">
+    <p>Schools that need a professional web presence for admissions, plus consistent printed materials across the academic year.</p>
+    <ul class="tab-services">
+      <li><span>01</span> School &amp; admissions websites</li>
+      <li><span>02</span> Prospectuses, ID cards &amp; certificates</li>
+      <li><span>03</span> Uniform &amp; signage branding</li>
+    </ul>
+  </div>
+  <div class="tab-panel" id="ngo">
+    <p>NGOs that need to communicate impact clearly online and print materials that hold up in the field and at donor meetings.</p>
+    <ul class="tab-services">
+      <li><span>01</span> NGO &amp; donor-facing websites</li>
+      <li><span>02</span> Reports, brochures &amp; impact decks</li>
+      <li><span>03</span> Campaign &amp; outreach branding</li>
+    </ul>
+  </div>
+</section>
+
+<section class="services">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">What we do</div>
+      <h2>Three disciplines, one team.</h2>
+    </div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h4>Website Development</h4>
+        <p>Business, church, school, NGO and eCommerce websites built to load fast and stay easy to update.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.2-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-4.4-4.5-8-10-8z"/></svg></div>
+        <h4>Graphic Design &amp; Branding</h4>
+        <p>Logos, flyers, brand identity and social media graphics, designed to be recognized at a glance.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
+        <h4>Printing</h4>
+        <p>Business cards, banners, booklets and signage, printed and finished to a professional standard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio container">
+  <div class="section-head">
+    <div class="eyebrow">Recent work</div>
+    <h2>A few things we've built.</h2>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-item">
+      <img src="https://placehold.co/600x450/0A2E22/E3A83B?text=Church+Website" alt="Church website project">
+      <span class="portfolio-tag">Church website</span>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://placehold.co/600x450/B24C1E/F7F5F0?text=Event+Flyer" alt="Event flyer design">
+      <span class="portfolio-tag">Event flyer</span>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://placehold.co/600x450/0A2E22/F7F5F0?text=School+Brand" alt="School brand identity">
+      <span class="portfolio-tag">School branding</span>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>Ready to build something?</h2>
+    <p>Tell us what you're working on and we'll put together a free quote within 24 hours.</p>
+    <a class="btn btn-primary" href="quote.html">Request a Free Quote</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E3A83B" stroke-width="1.6" style="vertical-align:-5px;margin-right:6px;"><path d="M3 8l4 3 5-7 5 7 4-3-2 11H5L3 8z"/></svg>
+          Maven Crown
+        </div>
+        <p>Website design, software development, branding and printing for businesses, churches, schools and organizations.</p>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li>mavencrown@gmail.com</li>
+          <li>WhatsApp: 0808 072 7598</li>
+          <li>Ogun State, Nigeria</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Maven Crown. All rights reserved.</span>
+      <span>Website Design &middot; Software Development &middot; Branding &middot; Printing</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('is-active'));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      document.getElementById(btn.dataset.tab).classList.add('is-active');
+    });
+  });
+  document.querySelector('.nav-toggle').addEventListener('click',()=>{
+    const links=document.querySelector('.nav-links');
+    links.style.display = links.style.display==='flex' ? 'none':'flex';
+  });
+</script>
+
+</body>
+</html>
 
